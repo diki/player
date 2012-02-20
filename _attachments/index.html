@@ -3,10 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<link href="skin/my.skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
 	
 	<script type="text/javascript" src="canva.js"></script>
+<!--	<script type="text/javascript" src="canvaobj.js"></script>-->
+	
 	
 	<script type="text/javascript">
 //<![CDATA[
@@ -34,6 +36,7 @@ $(document).ready(function(){
 		body {
 			font-family: "lucida sans", verdana, arial, helvetica, sans-serif;
 			font-size: 75%;
+			background-image: url(images/conbg.png);
 		}
 		h1 {
 			font-size: 1.4em;
@@ -48,7 +51,6 @@ $(document).ready(function(){
 		#container{
 			width: 80%;
 			min-height: 100%;
-			height: 100%;
 			margin: 0 auto;
 			z-index:0;
 		}
@@ -56,76 +58,48 @@ $(document).ready(function(){
 		#stage {
 			width: 100%;
 			min-height: 90%;
-			z-index: 0;
+			height: 90%;
 		}
 		
 		#myCanvas {
-			position:absolute;
-			right: 10%;
-			z-index:1;
-			top: 0px;
-			
 		}
 		
+		#canvas {
+
+		}
+		
+		#real-stage {
+			border: 1px solid yellow;
+			position: absolute;
+			height: 820px;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+		}
+		
+		div.station{
+			border: 1px solid yellow;
+			position:absolute;
+			height: 10px;
+			width: 10px;
+		}
+		
+		#canvas {
+		
+		}
 	</style>
 </head>
 <body>
-	<div id="container">
-		
-<!--		<div id="jquery_jplayer_1" class="jp-jplayer"></div>-->
-<!--		-->
-<!--		<div id="jp_container_1" class="jp-audio">-->
-<!--		<p>Ott - Squirrels and Biscuits</p>-->
-<!--			<div class="jp-type-single">-->
-<!--				<div class="jp-gui jp-interface">-->
-<!--					<ul class="jp-controls">-->
-<!--						<li><a href="javascript:;" class="jp-play" tabindex="1">></a></li>-->
-<!--						<li><a href="javascript:;" class="jp-pause" tabindex="1">||</a></li>-->
-<!--<!--						<li><a href="javascript:;" class="jp-stop" tabindex="1">||</a></li>-->-->
-<!--<!--						<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>-->-->
-<!--<!--						<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>-->-->
-<!--<!--						<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>-->-->
-<!--					</ul>-->
-<!--					<div class="jp-progress">-->
-<!--						<div class="jp-seek-bar">-->
-<!--							<div class="jp-play-bar"></div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--<!--					<div class="jp-volume-bar">-->-->
-<!--<!--						<div class="jp-volume-bar-value"></div>-->-->
-<!--<!--					</div>-->-->
-<!--<!--					<div class="jp-time-holder">-->-->
-<!--<!--						<div class="jp-current-time"></div>-->-->
-<!--<!--						<div class="jp-duration"></div>-->-->
 
-<!--<!--						<ul class="jp-toggles">-->-->
-<!--<!--							<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>-->-->
-<!--<!--							<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>-->-->
-<!--<!--						</ul>-->-->
-<!--<!--					</div>-->-->
-<!--				</div>-->
-<!--<!--				<div class="jp-title">-->-->
-<!--<!--					<ul>-->-->
-<!--<!--						<li>Cro Magnon Man</li>-->-->
-<!--<!--					</ul>-->-->
-<!--<!--				</div>-->-->
-<!--				<div class="jp-no-solution">-->
-<!--					<span>Update Required</span>-->
-<!--					To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-		
-		<img id="stage" src="images/bg3.png"></img>
-		<canvas id="myCanvas" width="653" height="592" style="margin:autobackground:url(cb2.png)">
-			Your browser does not support the canvas element.
-		</canvas>
+	<center>
+
+		<div id="cont" style="border: 3px solid white;width: 641px; height: 592px;">
+			<canvas id="canvas"></canvas>
+		</div>
+	</center>
+	<div id="real-stage">
 	</div>
 	
-<!-- 	http://video.ak.fbcdn.net/cfs-ak-snc6/350893/94/111204619002298_24215.mp4?oh=edb216298be4c81df8c21904862d1b7c&oe=4F279300&__gda__=1327993600_c485818bbf986caeed709a53890db77d -->
-
-	<script type="text/javascript">
-
-	</script>
+<!--	<script type="text/javascript" src="app.js"></script>-->
 </body>
 </html>

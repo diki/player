@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link href="skin/my.skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+	
+	<script type="text/javascript" src="canva.js"></script>
+<!--	<script type="text/javascript" src="canvaobj.js"></script>-->
+	
+	
+	<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+
+	$("#jquery_jplayer_1").jPlayer({
+		ready: function () {
+			$(this).jPlayer("setMedia", {
+				mp3:"http://muteam.fm/dl/Ott%20-%20Mir%20(2011)/04.%20Squirrel%20And%20Biscuits.mp3"
+			});
+		},
+		swfPath: "js",
+		supplied: "mp3",
+		wmode: "window"
+	});
+});
+//]]>
+</script>
+	<style type="text/css">
+	
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		body {
+			font-family: "lucida sans", verdana, arial, helvetica, sans-serif;
+			font-size: 75%;
+			background-image: url(images/conbg.png);
+		}
+		h1 {
+			font-size: 1.4em;
+			padding: 10px 10px 0;
+		}
+		p {
+			padding: 0 10px 1em;
+		}
+		html, body {
+			height: 100%;
+		}
+		#container{
+			width: 80%;
+			min-height: 100%;
+			margin: 0 auto;
+			z-index:0;
+		}
+		
+		#stage {
+			width: 100%;
+			min-height: 90%;
+			height: 90%;
+		}
+		
+		#myCanvas {
+		}
+		
+		#canvas {
+
+		}
+		
+		#real-stage {
+			border: 1px solid yellow;
+			position: absolute;
+			height: 820px;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+		}
+		
+		div.station{
+			border: 1px solid yellow;
+			position:absolute;
+			height: 10px;
+			width: 10px;
+		}
+		
+		#canvas {
+		
+		}
+	</style>
+</head>
+<body>
+
+	<center>
+		<div id="container" style="border: 3px solid white;width: 641px; height: 592px; position: relative;">
+			<canvas id="canvas"></canvas>
+		</div>
+	</center>
+ 	</div>
+	
+<!--	<script type="text/javascript" src="app.js"></script>-->
+</body>
+</html>

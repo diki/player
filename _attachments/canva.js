@@ -12,10 +12,13 @@ window.onload=function()
 	var container = $("#container");
 	container.append(canvas);
 	
+	//image element
 	var img=new Image();
 	img.src = "cb2.png";
 	
 	function init() {
+	
+			//on image load draw image to canvas
 			img.onload = function(){
 				canvas.width = img.width;
 				canvas.height = img.height;
@@ -23,12 +26,14 @@ window.onload=function()
 				ctx.drawImage(this,0,0);
 			}
 			
-//			return setInterval(draw, 10);
+			return setInterval(draw, 10);
 	}
 	
-
+	/*init function here...........*/
 	init();
-	var dx=1,dy=1;
+	/*int function here ...........*/
+	
+	var dx=1,dy=1; //unit of movement for x and y coordinates
 	var currentNode = 0;
 	
 	var vector = function(x,y){
@@ -36,10 +41,25 @@ window.onload=function()
 		this.y=y;
 	}
 	
-	var $traveler = function(x,y,nodeList,id,ml,mr){
-		var domObj = $("<div class='station' id=st_'"+id+"' style='margin-left:"+ml+"px;"+"margin-top:"+mr+"px;"+"'></div>");
-		$("#cont").prepend(domObj);
-		console.log("sadasd")
+	/*
+		* Prepend mask DOM object(s) to tree leafs mouse events (click, hover, touch) of nodes will be watched this way
+		* Also returns on object with attributes: xPosition, yPosition, nodes array that point will visit (path),
+		* Later this object will be used to draw and animate blue arcs
+		* 	x,y: current position
+		* 	nodeList: array of vectors of node's path'	
+		* 	nodeIndex --index of at which member of nodeList
+		* 	initialX and initialY -- initil point
+		*		opacity
+		*
+		* Also this object is binded with important events for current node change and path complete 
+	*/
+	var $traveler = function(x,y,nodeList,id,marginLeft,marginTop){
+	
+		//this is init function
+		var domObj = $("<div class='station' id=st_'"+id+"' style='left:"+marginLeft+"px;"+"top:"+marginTop+"px;"+"'></div>");
+		container.prepend(domObj);
+		//up to here
+		
 		var r = $({
 			positionX : x,
 			positionY : y,
@@ -51,10 +71,12 @@ window.onload=function()
 			id: "x" || id
 		});
 		
+		//on every node change
 		r.bind("nodeArrived", function(e){
 			e.currentTarget.nodeIndex++; 
 		});
 		
+		//on path complete
 		r.bind("pathComplete", function(e){
 			var o = e.currentTarget;
 			o.positionX = o.initialX;
@@ -68,32 +90,6 @@ window.onload=function()
 	
 	var travelers = [];	
 	var state="blur";
-	
-	var nl=[];
-	var node1 = new vector(90,29);
-	var node2 = new vector(90,47);
-	var node3 = new vector(164,47);
-	var node4 = new vector(219,99);
-	var node5 = new vector(250,99);
-	var node6 = new vector(250,110);
-	var node7 = new vector(339,110);
-	var node8 = new vector(350,114);
-	var node9 = new vector(356, 128);
-	var node10 = new vector(359,184);
-	nl.push(node1);
-	nl.push(node2);
-	nl.push(node3);
-	nl.push(node4);
-	nl.push(node5);
-	nl.push(node6);
-	nl.push(node7);
-	nl.push(node8);
-	nl.push(node9);
-
-	nl.push(node10);
-	
-	var t = new $traveler(41,29,nl,1,30,24);
-	travelers.push(t);
 	
 	var moveTraveler = function($t){
 		var t = $t[0];
@@ -180,6 +176,31 @@ window.onload=function()
 	}
 	var p1 = new vector(41,25);
 	
+	var nl=[];
+	var node1 = new vector(90,29);
+	var node2 = new vector(90,47);
+	var node3 = new vector(164,47);
+	var node4 = new vector(219,99);
+	var node5 = new vector(250,99);
+	var node6 = new vector(250,110);
+	var node7 = new vector(339,110);
+	var node8 = new vector(350,114);
+	var node9 = new vector(356, 128);
+	var node10 = new vector(359,184);
+	nl.push(node1);
+	nl.push(node2);
+	nl.push(node3);
+	nl.push(node4);
+	nl.push(node5);
+	nl.push(node6);
+	nl.push(node7);
+	nl.push(node8);
+	nl.push(node9);
+
+	nl.push(node10);
+	
+	var t = new $traveler(41,29,nl,1,30,24);
+	travelers.push(t);
 	var nl2=[];
 	var nt2_1 = new vector(57,47);
 	nl2.push(nt2_1);
@@ -246,33 +267,35 @@ window.onload=function()
 	nl6.push(node9);
 	nl6.push(node10);
 	var t6 = new $traveler(30,104,nl6, 6, 17, 97);
-	
 	travelers.push(t6);
+	
 	var nl7 = [];
 	var t7 = new $traveler(30, 115, nl7, 7,17, 108);
 	travelers.push(t7);
 	
-	var t8 = new $traveler();
+	//var t8 = new $traveler();
+
+	console.log("travelers: ", travelers);
+	
+//	bind click events to mask,
+//	they are already id attributed iwth own canvas node
+
 	
 	function draw(){
 		clear();
 		
+		//currently drawing image on every cycle 
+		//i think a better way could be applied
 		ctx.drawImage(img,0,0,canvas.width, canvas.height);
-
-		arc(t[0].positionX,t[0].positionY,4,t[0].opacity);
-		arc(t2[0].positionX,t2[0].positionY,4,t2[0].opacity);
-		arc(t3[0].positionX,t3[0].positionY,4,t3[0].opacity);
-		arc(t4[0].positionX,t4[0].positionY,4,t4[0].opacity);
-		arc(t5[0].positionX,t5[0].positionY,4,t5[0].opacity);
-		arc(t6[0].positionX,t6[0].positionY,4,t6[0].opacity);
-		arc(t7[0].positionX,t7[0].positionY,4,t7[0].opacity);
 		
-		moveTraveler(t);
-		moveTraveler(t2);
-		moveTraveler(t3);
-		moveTraveler(t4);
-		moveTraveler(t5);
-		moveTraveler(t6);
+		
+		//draw arcs for every traveler, travler object managament can be improved dramatically
+		//draw new arcs on every cycle
+		$.each(travelers, function(idx, el){
+			arc(el[0].positionX,el[0].positionY,4,el[0].opacity);
+			moveTraveler(el);
+		});
+		
 	}
 	
 	//init();

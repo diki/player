@@ -91,8 +91,16 @@ window.onload=function()
 	var travelers = [];	
 	var state="blur";
 	
-	var moveTraveler = function($t){
+	/**
+	 * [moveTraveler description]
+	 * @param  {[vector]} $t [path array]
+	 * @return {[type]}    [description]
+	 */
+	var moveTraveler = function($t, velocity){
+
+		//getting [0] because this is jquery object
 		var t = $t[0];
+
 		var crr = t.nodeIndex;
 		if(crr==t.nodesOnPath.length){
 			t.nodeIndex++;
@@ -108,10 +116,10 @@ window.onload=function()
 		
 		if(node.y==t.positionY){
 			if(node.x > t.positionX){
-				t.positionX++;
+				t.positionX+=velocity;
 			}
 			else if(node.x < t.positionX){
-				t.positionX--;
+				t.positionX-=velocity;
 			}
 			else{
 				$t.trigger("nodeArrived");
@@ -119,9 +127,9 @@ window.onload=function()
 		}
 		if(node.x==t.positionX){
 			if(node.y > t.positionY){
-				t.positionY++;
+				t.positionY+=velocity;
 			}else if(node.y < t.positionY){
-				t.positionY--;
+				t.position-=velocity;
 				if(t.positionY==node.y){
 					$t.trigger("nodeArrived");
 				}
@@ -130,19 +138,19 @@ window.onload=function()
 		if(node.x!=t.positionX && node.y!=t.positionY){
 			
 			if(node.x > t.positionX){
-				t.positionX++;
+				t.positionX+=velocity;
 			}
 			else if(node.x < t.positionX){
-				t.positionX--;
+				t.positionX-=velocity;
 			}
 			else{
 				$t.trigger("nodeArrived");
 			}
 			
 			if(node.y > t.positionY){
-				t.positionY++;
+				t.positionY+=velocity;
 			}else if(node.y < t.positionY){
-				t.positionY--;
+				t.positionY-=velocity;
 				if(t.positionY==node.y){
 					$t.trigger("nodeArrived");
 				}
@@ -293,7 +301,7 @@ window.onload=function()
 		//draw new arcs on every cycle
 		$.each(travelers, function(idx, el){
 			arc(el[0].positionX,el[0].positionY,4,el[0].opacity);
-			moveTraveler(el);
+			moveTraveler(el,0.5);
 		});
 		
 	}

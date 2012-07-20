@@ -7,26 +7,17 @@
 	<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
 	
 	<script type="text/javascript" src="canva.js"></script>
+	<script type="text/javascript" src="js/soundmanager2.js"></script>
 <!--	<script type="text/javascript" src="canvaobj.js"></script>-->
 	
 	
 	<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-
-	$("#jquery_jplayer_1").jPlayer({
-		ready: function () {
-			$(this).jPlayer("setMedia", {
-				mp3:"http://muteam.fm/dl/Ott%20-%20Mir%20(2011)/04.%20Squirrel%20And%20Biscuits.mp3"
-			});
-		},
-		swfPath: "js",
-		supplied: "mp3",
-		wmode: "window"
-	});
-});
-//]]>
-</script>
+		soundManager.url = './swf';
+		soundManager.useHighPerformance = true;
+		soundManager.useHTML5Audio = true;
+		soundManager.debugMode = false;
+	</script>
+	
 	<style type="text/css">
 	
 		* {

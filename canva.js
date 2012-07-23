@@ -1,20 +1,22 @@
 window.onload=function()
 {
+
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     
     var W_WIDTH = screen.width;
     var W_HEIGHT = screen.height;
 
+    $("#cc").css("left", (W_WIDTH-641)/2+"px");
     canvas.width = W_WIDTH/4;
     canvas.height = W_HEIGHT*0.5;
     
-    var container = $("#container");
+    var container = $("#canvasContainer");
     container.append(canvas);
     
     //image element
     var img=new Image();
-    img.src = "cb2.png";
+    img.src = "cb2-transparent.png";
     
     function init() {
     
@@ -46,6 +48,8 @@ window.onload=function()
         return Math.sqrt(r);
     }
     
+    window.currentPlayingPoint = false; //jquery object traveler
+
     /*
         * Prepend mask DOM object(s) to tree leafs mouse events (click, hover, touch) of nodes will be watched this way
         * Also returns on object with attributes: xPosition, yPosition, nodes array that point will visit (path),
@@ -58,7 +62,7 @@ window.onload=function()
         *
         * Also this object is binded with important events for current node change and path complete 
     */
-    var $traveler = function(x,y,nodeList,id,marginLeft,marginTop, sound){
+    var $traveler = function(x,y,nodeList,id,marginLeft,marginTop, soundUrl){
     
         //this is init function
         var domObj = $("<div class='station' id=st_'"+id+"' style='left:"+marginLeft+"px;"+"top:"+marginTop+"px;"+"'></div>");
@@ -74,11 +78,11 @@ window.onload=function()
         }
 
         //calculate velocity default:1
-        var velocity = 1;
-        if(sound!==undefined){
-            velocity = pathLength/sound.duration*40;
-            console.log("duraiton",velocity);
-        }
+        var velocity = 0;
+        // if(sound!==undefined){
+        //     velocity = pathLength/sound.duration*40;
+        //     console.log("duraiton",velocity);
+        // }
         var r = $({
             positionX : x,
             positionY : y,
@@ -87,9 +91,71 @@ window.onload=function()
             initialX: x,
             initialY: y,
             opacity: 1,
-            id: "x" || id,
+            id: id,
             velocity: velocity,
             pathLength: Math.ceil(pathLength),
+            sound: undefined
+        });
+
+        var self = r[0];
+
+        domObj.click(function(){
+
+            //current status -- sound loaded?
+            if(self.sound!==undefined){
+
+                if(self.sound.readyState===3){
+                    if(self.sound.playState==1){ //if playing
+                        self.sound.stop();
+                        //and move circle to start point
+                        window.currentPlayingPoint = false;
+                        r.trigger("pathComplete");
+                        r.trigger("stop");
+                    } else {
+
+                        console.log(window.currentPlayingPoint, "on sound loaded");
+                        window.currentPlayingPoint.trigger("pathComplete");
+                        window.currentPlayingPoint.trigger("stop");
+
+                        window.currentPlayingPoint = r;
+                        self.sound.play();
+                    }
+                } 
+            } else {
+                console.log("sound loading for the first time")
+                if(soundUrl!==undefined){
+                    self.sound = soundManager.createSound({
+                          id: r[0].id,
+                          url: soundUrl,
+                          autoLoad: true,
+                          //autoPlay: false,
+                          onload: function() {
+                            console.log('The sound '+this.sID+' loaded!');
+                            
+                            //var t = new $traveler(41,29,nl,1,30,24,sampleSound);
+
+                            //set velocity
+                            r[0].velocity = r[0].pathLength/this.duration*40;
+                            
+                            //set currentPlayingPoint
+                            if(window.currentPlayingPoint){
+                                //currentPlayingPoint.trigger("reset");
+                                window.currentPlayingPoint.trigger("pathComplete");
+                                window.currentPlayingPoint.trigger("stop");                                
+                                console.log("active playing sound", window.currentPlayingPoint, r[0]);
+                            }else {
+                                
+                            }
+
+                            window.currentPlayingPoint = r;
+                            console.log("crrentl palyi this must be self", window.currentPlayingPoint, r[0]);
+                            this.play();
+                          },
+                          volume: 50
+                    });
+                }
+
+            }
         });
         
         //on every node change
@@ -104,6 +170,20 @@ window.onload=function()
             o.positionY = o.initialY;
             o.nodeIndex = 0;
             o.opacity=1;
+
+        });
+
+        //on stop
+        r.bind("stop", function(e){
+            console.log("lenn");
+            e.currentTarget.velocity = 0;
+            e.currentTarget.sound.stop();
+        });
+
+        r.on("reset", function(){
+            console.log("resettting");
+            this.trigger("pathComplete");
+            this.trigger("stop");
         });
         
         return r;
@@ -237,23 +317,26 @@ window.onload=function()
         nl.push(node7);
         nl.push(node8);
         nl.push(node9);
-
         nl.push(node10);
-        window.sampleSound = soundManager.createSound({
-              id: "1",
-              url: "http://muteam.fm/dl/Ott%20-%20Mir%20(2011)/04.%20Squirrel%20And%20Biscuits.mp3",
-              autoLoad: true,
-              autoPlay: false,
-              onload: function() {
-                console.log('The sound '+this.sID+' loaded!');
-                
-                var t = new $traveler(41,29,nl,1,30,24,sampleSound);
 
-                travelers.push(t);
-                this.play();
-              },
-              volume: 50
-        });
+        //x,y,path,id, marginLeft, marginTop, soundUrl
+        var t = new $traveler(36,29,nl,1,30,24,"http://muteam.fm/dl/Ott%20-%20Mir%20(2011)/04.%20Squirrel%20And%20Biscuits.mp3");
+        travelers.push(t);
+        // window.sampleSound = soundManager.createSound({
+        //       id: "1",
+        //       url: "http://muteam.fm/dl/Ott%20-%20Mir%20(2011)/04.%20Squirrel%20And%20Biscuits.mp3",
+        //       autoLoad: true,
+        //       autoPlay: false,
+        //       onload: function() {
+        //         console.log('The sound '+this.sID+' loaded!');
+                
+        //         var t = new $traveler(41,29,nl,1,30,24,sampleSound);
+
+        //         travelers.push(t);
+        //         this.play();
+        //       },
+        //       volume: 50
+        // });
 
 
         var nl2=[];
@@ -267,7 +350,7 @@ window.onload=function()
         nl2.push(node8);
         nl2.push(node9);
         nl2.push(node10);
-        var t2 = new $traveler(57,54,nl2,2, 54, 55);
+        var t2 = new $traveler(60,60,nl2,2, 54, 55, "http://www.muteam.fm/dl/Carbon%20Based%20Lifeforms%20-%20World%20of%20Sleepers%20(2006)/03%20Carbon%20Based%20Lifeforms%20-%20Photosynthesis.mp3");
         travelers.push(t2);
         
         var nl3 = [];
@@ -279,7 +362,7 @@ window.onload=function()
         nl3.push(node8);
         nl3.push(node9);
         nl3.push(node10);
-        var t3 = new $traveler(274,55,nl3,3, 271, 47);
+        var t3 = new $traveler(276,52,nl3,3, 271, 47);
        travelers.push(t3);
         
         var nl4 = [];
@@ -293,7 +376,7 @@ window.onload=function()
         nl4.push(node8);
         nl4.push(node9);
         nl4.push(node10);
-        var t4 = new $traveler(30,80,nl4, 4, 17, 74);
+        var t4 = new $traveler(24,80,nl4, 4, 17, 74);
         travelers.push(t4);
         
         var nl5 = [];
@@ -307,7 +390,7 @@ window.onload=function()
         nl5.push(node8);
         nl5.push(node9);
         nl5.push(node10);
-        var t5 = new $traveler(30,92,nl5, 5, 17, 85);
+        var t5 = new $traveler(24,92,nl5, 5, 17, 85);
         
         travelers.push(t5);
         var nl6 = [];
@@ -321,11 +404,11 @@ window.onload=function()
         nl6.push(node8);
         nl6.push(node9);
         nl6.push(node10);
-        var t6 = new $traveler(30,104,nl6, 6, 17, 97);
+        var t6 = new $traveler(24,104,nl6, 6, 17, 97);
         travelers.push(t6);
         
         var nl7 = [];
-        var t7 = new $traveler(30, 115, nl7, 7,17, 108);
+        var t7 = new $traveler(24, 115, nl7, 7,17, 108);
         travelers.push(t7);
         
         //var t8 = new $traveler();
